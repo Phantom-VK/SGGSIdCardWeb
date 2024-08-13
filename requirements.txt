@@ -1,0 +1,10 @@
+Pillow~=10.4.0
+reportlab~=4.2.2
+tk
+firebase~=4.0.1
+Pyrebase~=3.0.27
+python-barcode
+future~=1.0.0
+segno~=1.6.1
+flask~=3.0.3
+barcode~=1.0.4

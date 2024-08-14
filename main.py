@@ -1,3 +1,4 @@
+from django.template.defaultfilters import title
 from flask import Flask, render_template, request, send_file
 from io import BytesIO
 from id_card import create_id_card
@@ -38,6 +39,12 @@ def index():
             back_img_io.close()
 
     return render_template('index.html')
+
+# # Incomplete function:
+# @app.route('/add_student', methods=['GET', 'POST'])
+# def add_student():
+#     if request.method == 'POST':
+#         return render_template('add_student.html', title=title('Submit Student Details'))
 
 
 if __name__ == "__main__":

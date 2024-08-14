@@ -1,5 +1,5 @@
 def branch_check(branch):
-    branches = ["bit", "bec", "bpd", "bel", "bcs"]
+    branches = ["bit", "bec", "bpd", "bel", "bcs", "bpr"]
     return branch in branches
 
 

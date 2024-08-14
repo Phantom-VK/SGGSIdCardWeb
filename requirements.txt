@@ -8,3 +8,4 @@ future~=1.0.0
 segno~=1.6.1
 flask~=3.0.3
 barcode~=1.0.4
+Django~=4.2.15

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a new student</title>
+</head>
+<body>
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+        <label for="reg_no">Enter Student Name:</label><br>
+        <input type="text" id="name" name="name"><br><br>
+
+        <label for="reg_no">Enter Registration Number:</label><br>
+        <input type="text" id="reg_no" name="reg_no"><br><br>
+
+        <label for="reg_no">Enter branch:</label><br>
+        <input type="text" id="branch" name="branch"><br><br>
+
+        <label for="reg_no">Enter Date Of Birth:</label><br>
+        <input type="text" id="dob" name="dob"><br><br>
+
+        <label for="reg_no">Enter Mobile Number:</label><br>
+        <input type="text" id="mob_no" name="mob_no"><br><br>
+
+        <label for="reg_no">Enter Parent's Mobile Number:</label><br>
+        <input type="text" id="parent_mob_no" name="parent_mob_no"><br><br>
+
+        <label for="reg_no">Enter Address:</label><br>
+        <input type="text" id="address" name="address"><br><br>
+
+        <button type="submit">Upload Photo</button><br><br>
+
+        <button type="submit">Add new student</button>
+
+        <button type="submit">Go back</button>
+
+
+    </form>
+</body>
+</html>

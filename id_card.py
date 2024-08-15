@@ -32,7 +32,8 @@ def create_id_card(student_details):
     id_card_back = Image.open(resource_path("Idcard_back.png"))
     back_draw = ImageDraw.Draw(id_card_back)
 
-    # Student's image
+    # Student's image-
+
     student_img = Image.open(resource_path("student.jpg"))
 
     # Load the font

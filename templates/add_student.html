@@ -6,38 +6,35 @@
     <title>Add a new student</title>
 </head>
 <body>
-    {% if error %}
-        <p style="color:red;">{{ error }}</p>
-    {% endif %}
-    <form method="POST">
-        <label for="reg_no">Enter Student Name:</label><br>
-        <input type="text" id="name" name="name"><br><br>
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% endif %}
+<form action="{{ url_for('add_new_student') }}" method="POST">
+    <label for="name">Enter Student Name:</label><br>
+    <input type="text" id="name" name="name" value="{{ name }}"><br><br>
 
-        <label for="reg_no">Enter Registration Number:</label><br>
-        <input type="text" id="reg_no" name="reg_no"><br><br>
+    <label for="reg_no">Enter Registration Number:</label><br>
+    <input type="text" id="reg_no" name="reg_no" value="{{ reg_no }}"><br><br>
 
-        <label for="reg_no">Enter branch:</label><br>
-        <input type="text" id="branch" name="branch"><br><br>
+    <label for="branch">Enter branch:</label><br>
+    <input type="text" id="branch" name="branch" value="{{ branch }}"><br><br>
 
-        <label for="reg_no">Enter Date Of Birth:</label><br>
-        <input type="text" id="dob" name="dob"><br><br>
+    <label for="dob">Enter Date Of Birth:</label><br>
+    <input type="text" id="dob" name="dob" value="{{ dob }}"><br><br>
 
-        <label for="reg_no">Enter Mobile Number:</label><br>
-        <input type="text" id="mob_no" name="mob_no"><br><br>
+    <label for="mob_no">Enter Mobile Number:</label><br>
+    <input type="text" id="mob_no" name="mob_no" value="{{ mob_no }}"><br><br>
 
-        <label for="reg_no">Enter Parent's Mobile Number:</label><br>
-        <input type="text" id="parent_mob_no" name="parent_mob_no"><br><br>
+    <label for="parent_mob_no">Enter Parent's Mobile Number:</label><br>
+    <input type="text" id="parent_mob_no" name="parent_mob_no" value="{{ parent_mob_no }}"><br><br>
 
-        <label for="reg_no">Enter Address:</label><br>
-        <input type="text" id="address" name="address"><br><br>
+    <label for="address">Enter Address:</label><br>
+    <input type="text" id="address" name="address" value="{{ address }}"><br><br>
 
-        <button type="submit">Upload Photo</button><br><br>
-
-        <button type="submit">Add new student</button>
-
-        <button type="submit">Go back</button>
-
-
-    </form>
+    <button type="submit">Add new student</button><br><br>
+</form>
+<form action="{{ url_for('index') }}" method="post">
+    <button type="submit">Go back</button>
+</form>
 </body>
 </html>

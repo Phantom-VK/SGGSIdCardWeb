@@ -1,5 +1,7 @@
+
 from flask import Flask, render_template, request, send_file, redirect, url_for
 from id_card import create_id_card
+from click_image import capture_image
 from pdf_converter import convert_to_pdf
 from firebase_config import initialize_firebase, fetch_student_details, db
 import check_inputs
@@ -80,6 +82,16 @@ def add_new_student():
 
     # Redirect back to home or show a success message
     return redirect(url_for('index'))
+
+
+
+# TODO Fix issue where after clicking image text fields getting empty
+@app.route('/click-image', methods=['POST'])
+def click_image():
+    capture_image()
+    return go_to_new_page()
+    # return render_template('add_student.html',
+    #                            **student_details)
 
 
 if __name__ == "__main__":

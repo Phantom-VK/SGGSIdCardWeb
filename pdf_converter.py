@@ -5,7 +5,7 @@ from reportlab.pdfgen import canvas
 from io import BytesIO
 
 
-def convert_to_pdf(front_image_io, back_image_io, name):
+def convert_to_pdf(front_image_io, back_image_io):
     pdf_io = BytesIO()
 
     front_img = Image.open(front_image_io)

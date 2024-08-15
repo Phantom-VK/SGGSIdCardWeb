@@ -1,9 +1,7 @@
-from django.template.defaultfilters import title
-from flask import Flask, render_template, request, send_file
-from io import BytesIO
+from flask import Flask, render_template, request, send_file, redirect, url_for
 from id_card import create_id_card
 from pdf_converter import convert_to_pdf
-from firebase_config import initialize_firebase, fetch_student_details
+from firebase_config import initialize_firebase, fetch_student_details, db
 import check_inputs
 
 app = Flask(__name__)
@@ -28,7 +26,7 @@ def index():
             front_img_io, back_img_io = create_id_card(details)
 
             # Convert to PDF
-            pdf_io = convert_to_pdf(front_img_io, back_img_io, details['name'])
+            pdf_io = convert_to_pdf(front_img_io, back_img_io)
             pdf_io.seek(0)
 
             return send_file(pdf_io, as_attachment=True, download_name=f"{details['name']}IDCard.pdf")
@@ -40,11 +38,48 @@ def index():
 
     return render_template('index.html')
 
-# # Incomplete function:
-# @app.route('/add_student', methods=['GET', 'POST'])
-# def add_student():
-#     if request.method == 'POST':
-#         return render_template('add_student.html', title=title('Submit Student Details'))
+
+@app.route('/add-student', methods=['GET', 'POST'])
+def add_student_page():
+    if request.method == 'POST':
+        return render_template("add_student.html")
+    return render_template("add_student.html")
+
+
+@app.route('/go-to-new-page', methods=['POST'])
+def go_to_new_page():
+    return redirect(url_for('add_student_page'))
+
+
+@app.route('/to-home-screen', methods=['POST'])
+def go_to_home():
+    return redirect('/')
+
+
+@app.route('/add-new-student', methods=['POST'])
+def add_new_student():
+    # Extract form data
+    student_details = {
+        "name": request.form.get("name"),
+        "reg_no": request.form.get("reg_no").upper(),
+        "branch": request.form.get("branch"),
+        "dob": request.form.get("dob"),
+        "mob_no": request.form.get("mob_no"),
+        "parent_mob_no": request.form.get("parent_mob_no"),
+        "address": request.form.get("address")
+    }
+
+    # Validate the registration number
+    if not check_inputs.check_reg(student_details["reg_no"]):
+        return render_template('add_student.html', error="Invalid registration number format.",
+                               **student_details)
+
+    # Add student to Firebase
+    ref = db.reference(f'/students/{student_details["reg_no"]}')
+    ref.set(student_details)
+
+    # Redirect back to home or show a success message
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":

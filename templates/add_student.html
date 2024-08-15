@@ -31,8 +31,15 @@
     <label for="address">Enter Address:</label><br>
     <input type="text" id="address" name="address" value="{{ address }}"><br><br>
 
-    <button type="submit">Add new student</button><br><br>
+
+    <button type="submit">Add new student</button>
+    <br><br>
+
 </form>
+<form action="{{ url_for('click_image') }}" method="post">
+    <button type="submit">Upload Image</button>
+</form>
+<br>
 <form action="{{ url_for('index') }}" method="post">
     <button type="submit">Go back</button>
 </form>

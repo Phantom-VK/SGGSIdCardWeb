@@ -118,6 +118,101 @@
                 <button type="button" onclick="window.history.back();">Go Back</button>
             </div>
         </form>
+
+    <title>Add a new student</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin: 20px 0;
+        }
+        label {
+            font-size: 16px;
+            color: #555;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+    </style 
+</head>
+<body>
+    <div class="container">
+        <h1>Add a new Student</h1>
+        {% if error %}
+        <p style="color:red;">{{ error }}</p>
+        {% endif %}
+
+    <form method="POST">
+        <label for="reg_no">Enter Student Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="reg_no">Enter Registration Number:</label><br>
+        <input type="text" id="reg_no" name="reg_no" required><br><br>
+
+        <label for="reg_no">Enter branch:</label><br>
+        <input type="text" id="branch" name="branch" required><br><br>
+
+        <label for="reg_no">Enter Date Of Birth:</label><br>
+        <input type="text" id="dob" name="dob" required><br><br>
+
+        <label for="reg_no">Enter Mobile Number:</label><br>
+        <input type="text" id="mob_no" name="mob_no" required><br><br>
+
+        <label for="reg_no">Enter Parent's Mobile Number:</label><br>
+        <input type="text" id="parent_mob_no" name="parent_mob_no" required><br><br>
+
+        <label for="reg_no">Enter Address:</label><br>
+        <input type="text" id="address" name="address" required><br><br>
+
+        <button type="submit">Upload Photo</button>
+
+        <button type="submit">Add new student</button>
+
+        <button type="submit" onclick='window.history.back();'>Go back</button>
+
+
+    </form>
     </div>
 </body>
 </html>

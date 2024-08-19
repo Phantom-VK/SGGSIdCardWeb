@@ -3,45 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add a new student</title>
+    <title>Add a New Student</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #2b2b2b;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #f39c12;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ccc;
+        }
+        .form-group input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: #333;
+            color: #fff;
+            font-size: 16px;
+        }
+        .form-group input[type="text"]:focus {
+            border-color: #f39c12;
+            outline: none;
+        }
+        .form-group button {
+            background-color: #f39c12;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .form-group button:hover {
+            background-color: #e67e22;
+        }
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        h2 {
+            margin: 20px 0;
+            color: #aaa;
+        }
+    </style>
 </head>
 <body>
-{% if error %}
-<p style="color:red;">{{ error }}</p>
-{% endif %}
-<form action="{{ url_for('add_new_student') }}" method="POST">
-    <label for="name">Enter Student Name:</label><br>
-    <input type="text" id="name" name="name" value="{{ name }}"><br><br>
+    <div class="container">
+        <h1>Add a New Student</h1>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <form method="POST" action="{{ url_for('add_new_student') }}">
+            <div class="form-group">
+                <label for="name">Enter Student Name:</label>
+                <input type="text" id="name" name="name" value="{{ name }}" required>
+            </div>
 
-    <label for="reg_no">Enter Registration Number:</label><br>
-    <input type="text" id="reg_no" name="reg_no" value="{{ reg_no }}"><br><br>
+            <div class="form-group">
+                <label for="reg_no">Enter Registration Number:</label>
+                <input type="text" id="reg_no" name="reg_no" value="{{ reg_no }}" required>
+            </div>
 
-    <label for="branch">Enter branch:</label><br>
-    <input type="text" id="branch" name="branch" value="{{ branch }}"><br><br>
+            <div class="form-group">
+                <label for="branch">Enter Branch:</label>
+                <input type="text" id="branch" name="branch" value="{{ branch }}" required>
+            </div>
 
-    <label for="dob">Enter Date Of Birth:</label><br>
-    <input type="text" id="dob" name="dob" value="{{ dob }}"><br><br>
+            <div class="form-group">
+                <label for="dob">Enter Date of Birth:</label>
+                <input type="text" id="dob" name="dob" value="{{ dob }}" required>
+            </div>
 
-    <label for="mob_no">Enter Mobile Number:</label><br>
-    <input type="text" id="mob_no" name="mob_no" value="{{ mob_no }}"><br><br>
+            <div class="form-group">
+                <label for="mob_no">Enter Mobile Number:</label>
+                <input type="text" id="mob_no" name="mob_no" value="{{ mob_no }}" required>
+            </div>
 
-    <label for="parent_mob_no">Enter Parent's Mobile Number:</label><br>
-    <input type="text" id="parent_mob_no" name="parent_mob_no" value="{{ parent_mob_no }}"><br><br>
+            <div class="form-group">
+                <label for="parent_mob_no">Enter Parent's Mobile Number:</label>
+                <input type="text" id="parent_mob_no" name="parent_mob_no" value="{{ parent_mob_no }}" required>
+            </div>
 
-    <label for="address">Enter Address:</label><br>
-    <input type="text" id="address" name="address" value="{{ address }}"><br><br>
+            <div class="form-group">
+                <label for="address">Enter Address:</label>
+                <input type="text" id="address" name="address" value="{{ address }}" required>
+            </div>
 
-
-    <button type="submit">Add new student</button>
-    <br><br>
-
-</form>
-<form action="{{ url_for('click_image') }}" method="post">
-    <button type="submit">Upload Image</button>
-</form>
-<br>
-<form action="{{ url_for('index') }}" method="post">
-    <button type="submit">Go back</button>
-</form>
+            <div class="form-group">
+                <button type="submit" formaction="{{ url_for('click_image') }}">Upload Photo</button>
+                <button type="submit" formaction="{{ url_for('add_new_student') }}">Add New Student</button>
+                <button type="button" onclick="window.history.back();">Go Back</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

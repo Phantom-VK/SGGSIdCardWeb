@@ -5,67 +5,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ID Card Generator</title>
     <style>
+        /* existing styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2E0854, #751d73, #ff0055); /* Gradient background similar to the image */
+            color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
         .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #2b2b2b;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            background: #33aaff; /* Light blue background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             text-align: center;
+            width: 400px;
         }
+
         h1 {
-            color: #f39c12;
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
+
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
-            color: #ccc;
-        }
-        .form-group input[type="text"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #555;
-            border-radius: 4px;
-            background: #333;
             color: #fff;
-            font-size: 16px;
+            text-align: left;
         }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            background: #fff;
+            color: #333;
+            font-size: 16px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+
         .form-group input[type="text"]:focus {
-            border-color: #f39c12;
+            border-color: #66CCFF;
             outline: none;
         }
+
         .form-group button {
-            background-color: #f39c12;
+            background-color: #00008b;
             color: #fff;
             border: none;
-            padding: 10px 15px;
+            padding: 12px;
             font-size: 16px;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            margin: 5px;
+            margin: 5px 0;
+            width: 100%;
+            transition: background-color 0.3s ease;
         }
+
         .form-group button:hover {
-            background-color: #e67e22;
+            background-color: #005bb5;
         }
+
         .error-message {
             color: #e74c3c;
             margin-bottom: 15px;
         }
+
         h2 {
-            margin: 20px 0;
-            color: #aaa;
+            margin: 25px 0;
+            color: #fff;
+            font-size: 18px;
+            border-bottom: 1px solid #fff;
+            line-height: 0.1em;
+            margin: 10px 0 20px;
+        }
+
+        h2 span {
+            background: #33aaff;
+            padding: 0 10px;
+        }
+
+        .add-student-button {
+            background-color: #f39c12;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-student-button:hover {
+            background-color: #d68910;
+        }
+        /* Add styles for the ID card preview */
+        .preview-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .preview-images {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .preview-images img {
+            max-width: 45%; /* Adjust the width as needed */
+            height: auto;
+            border: 2px solid #00008b;
+            border-radius: 5px;
+        }
+
+        .download-button {
+            background-color: #00008b;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #005bb5;
         }
     </style>
 </head>
@@ -75,7 +156,7 @@
         {% if error %}
             <p class="error-message">{{ error }}</p>
         {% endif %}
-        <form method="POST">
+        <form method="POST" id="generateForm">
             <div class="form-group">
                 <label for="reg_no">Enter Registration Number:</label>
                 <input type="text" id="reg_no" name="reg_no" required>
@@ -86,6 +167,18 @@
             </div>
         </form>
 
+        <div class="preview-container" id="previewContainer">
+            <h2>ID Card Preview</h2>
+            <div class="preview-images">
+                <img id="frontPreview" alt="Front Side of ID Card">
+                <img id="backPreview" alt="Back Side of ID Card">
+            </div>
+            <form method="POST" action="/download-id-card">
+                <input type="hidden" name="reg_no" id="hiddenRegNo">
+                <button type="submit" class="download-button">Download PDF</button>
+            </form>
+        </div>
+
         <h2>OR</h2>
 
         <form method="POST" action="/add_student_page">
@@ -94,5 +187,30 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById('generateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const regNo = document.getElementById('reg_no').value;
+            fetch(`/preview-id-card`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reg_no: regNo })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('frontPreview').src = `data:image/png;base64,${data.front_img}`;
+                    document.getElementById('backPreview').src = `data:image/png;base64,${data.back_img}`;
+                    document.getElementById('hiddenRegNo').value = regNo;
+                    document.getElementById('previewContainer').style.display = 'block';
+                } else {
+                    alert('Error generating ID card preview: ' + data.error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

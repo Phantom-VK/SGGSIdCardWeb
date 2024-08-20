@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for
+import base64
+
+from flask import Flask, render_template, request, send_file, redirect, url_for, jsonify
 from id_card import create_id_card
 from click_image import capture_image
 from pdf_converter import convert_to_pdf
@@ -13,31 +15,57 @@ initialize_firebase()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        reg_no = request.form.get('reg_no').upper()
-        if not check_inputs.check_reg(reg_no):
-            return render_template('index.html', error="Invalid registration number format.")
-
-        details = fetch_student_details(reg_no)
-        if not details:
-            return render_template('index.html', error="No student details found in the database")
-
-        try:
-            # Generate ID Card
-            front_img_io, back_img_io = create_id_card(details)
-
-            # Convert to PDF
-            pdf_io = convert_to_pdf(front_img_io, back_img_io)
-            pdf_io.seek(0)
-
-            return send_file(pdf_io, as_attachment=True, download_name=f"{details['name']}IDCard.pdf")
-
-        finally:
-            # Close the BytesIO streams to free memory
-            front_img_io.close()
-            back_img_io.close()
-
     return render_template('index.html')
+
+
+@app.route('/preview-id-card', methods=['POST'])
+def preview_id_card():
+    reg_no = request.json.get('reg_no').upper()
+    if not check_inputs.check_reg(reg_no):
+        return jsonify(success=False, error="Invalid registration number format.")
+
+    details = fetch_student_details(reg_no)
+    if not details:
+        return jsonify(success=False, error="No student details found in the database")
+
+    try:
+        # Generate ID Card
+        front_img_io, back_img_io = create_id_card(details)
+
+        # Convert images to base64 to send to the frontend
+        front_img_base64 = base64.b64encode(front_img_io.getvalue()).decode('utf-8')
+        back_img_base64 = base64.b64encode(back_img_io.getvalue()).decode('utf-8')
+
+        return jsonify(success=True, front_img=front_img_base64, back_img=back_img_base64)
+
+    finally:
+        front_img_io.close()
+        back_img_io.close()
+
+
+@app.route('/download-id-card', methods=['POST'])
+def download_id_card():
+    reg_no = request.form.get('reg_no').upper()
+    if not check_inputs.check_reg(reg_no):
+        return render_template('index.html', error="Invalid registration number format.")
+
+    details = fetch_student_details(reg_no)
+    if not details:
+        return render_template('index.html', error="No student details found in the database")
+
+    try:
+        # Generate ID Card
+        front_img_io, back_img_io = create_id_card(details)
+
+        # Convert to PDF
+        pdf_io = convert_to_pdf(front_img_io, back_img_io)
+        pdf_io.seek(0)
+
+        return send_file(pdf_io, as_attachment=True, download_name=f"{details['name']}IDCard.pdf")
+
+    finally:
+        front_img_io.close()
+        back_img_io.close()
 
 
 @app.route('/add-student', methods=['GET', 'POST'])
